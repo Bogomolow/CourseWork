@@ -24,7 +24,7 @@ namespace SpotifyTelegramBot
     internal class Program
     {
         
-        private static readonly string BotToken = "8808782763:AAF-lhOvBOvHjzHxqVzk5c7VW-c4daLKo24";
+        private static readonly string BotToken = "Мій токен";
         private static readonly string ApiUrl = "https://localhost:7178/api/tracks";
 
         private static Dictionary<long, List<SavedTrack>> _lastSearches = new Dictionary<long, List<SavedTrack>>();
@@ -47,7 +47,7 @@ namespace SpotifyTelegramBot
             var cts = new CancellationTokenSource();
 
             var me = await botClient.GetMe();
-            Console.WriteLine($"Бот @{me.Username} успішно запущений! Помилки 'Query is too old' можна ігнорувати.");
+            Console.WriteLine($"Бот @{me.Username} успішно запущений! ");
 
             botClient.StartReceiving(HandleUpdateAsync, HandleErrorAsync, null, cts.Token);
             Console.ReadLine();
@@ -248,7 +248,7 @@ namespace SpotifyTelegramBot
                         }
                         else
                         {
-                            // Якщо сервер не зміг видалити, все одно прибираємо "годинничок" завантаження
+                            
                             await botClient.AnswerCallbackQuery(callbackQuery.Id, "❌ Не вдалося видалити", cancellationToken: cancellationToken);
                         }
                     }
@@ -256,7 +256,7 @@ namespace SpotifyTelegramBot
             }
             catch
             {
-                // Цей блок перехоплює всі помилки (включно з 'query is too old'), щоб бот не падав
+            
                 try { await botClient.AnswerCallbackQuery(callbackQuery.Id, "❌ Сталася помилка", cancellationToken: cancellationToken); } catch { }
             }
         }
@@ -303,7 +303,7 @@ namespace SpotifyTelegramBot
                                           $"⭐️ Рейтинг: {fakeRating}/5.0\n" +
                                           $"{spotifyLink}";
 
-                            // 🌟 ВАЖЛИВО: Захист для старих треків. Якщо Id пустий, використовуємо SpotifyId для видалення.
+                            
                             string safeIdForDelete = !string.IsNullOrEmpty(track.Id) ? track.Id : track.SpotifyId;
 
                             var button = InlineKeyboardButton.WithCallbackData("❌ Видалити", $"delete|{safeIdForDelete}");

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace CourseWork7.Services
 {
-    // Цей клас відповідає виключно за похід в інтернет до Spotify API
+    
     public class SpotifyService
     {
         private readonly HttpClient _httpClient;
@@ -13,7 +13,7 @@ namespace CourseWork7.Services
             _httpClient = new HttpClient();
         }
 
-        // Метод, який приймає запит (наприклад, "Eminem") і повертає готовий список наших треків
+       
         public async Task<List<SavedTrack>> SearchAndFilterTracksAsync(string query)
         {
             var request = new HttpRequestMessage
@@ -29,31 +29,31 @@ namespace CourseWork7.Services
 
             using (var response = await _httpClient.SendAsync(request))
             {
-                // Якщо помилка (наприклад 429) - викидаємо виключення
+                
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
 
-                // Десеріалізуємо велику і складну відповідь від Spotify
+               
                 var spotifyData = JsonConvert.DeserializeObject<SpotifySearchResponse.Rootobject>(body);
 
                 if (spotifyData?.tracks?.items != null)
                 {
                     var allTracks = spotifyData.tracks.items;
 
-                    // ТВОЯ ЛОГІКА З 6-Ї ЛАБИ: Фільтруємо (> 3 хв) та сортуємо
+                    
                     var filteredAndSorted = allTracks
                         .Where(track => track.data.duration.totalMilliseconds > 180000)
                         .OrderBy(track => track.data.name)
                         .ToList();
 
-                    // МАПІНГ: Перетворюємо складну модель Spotify у нашу просту і зручну модель SavedTrack
+                    
                     var resultList = new List<SavedTrack>();
 
                     foreach (var item in filteredAndSorted)
                     {
                         resultList.Add(new SavedTrack
                         {
-                            // Id згенерується автоматично, його не чіпаємо
+                            
                             SpotifyId = item.data.id,
                             Name = item.data.name,
                             DurationSeconds = Math.Round(item.data.duration.totalMilliseconds / 1000.0, 1)
@@ -63,7 +63,7 @@ namespace CourseWork7.Services
                     return resultList;
                 }
 
-                // Якщо нічого не знайшли, повертаємо порожній список
+                
                 return new List<SavedTrack>();
             }
         }
