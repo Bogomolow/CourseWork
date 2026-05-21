@@ -24,7 +24,7 @@ namespace SpotifyTelegramBot
     internal class Program
     {
         
-        private static readonly string BotToken = "МІЙ ТОКЕН";
+        private static readonly string BotToken = "8808782763:AAF-lhOvBOvHjzHxqVzk5c7VW-c4daLKo24";
         private static readonly string ApiUrl = "https://localhost:7178/api/tracks";
 
         private static Dictionary<long, List<SavedTrack>> _lastSearches = new Dictionary<long, List<SavedTrack>>();
